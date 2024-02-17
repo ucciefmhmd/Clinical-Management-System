@@ -6,3 +6,6 @@ In terms of database management, the CTMS employs a Code First approach with Ent
 
 Key features of the CTMS include patient enrollment and management, study protocol tracking, scheduling of visits and procedures, data collection and analysis, regulatory compliance monitoring, and reporting functionalities. These features are designed to streamline trial operations, improve efficiency, and ensure compliance with regulatory requirements.
 
+
+ScreenShot
+https://i.imgur.com/y6UMQ0L.jpg
