@@ -7,46 +7,17 @@
     <Nullable>enable</Nullable>
     <UseWindowsForms>true</UseWindowsForms>
     <ImplicitUsings>enable</ImplicitUsings>
+    <!-- The class library and the tests live in sub-folders with their own projects;
+         keep this project's default globs from picking up their sources. -->
+    <DefaultItemExcludes>$(DefaultItemExcludes);ClinicManagement.Core\**;ClinicManagement.Tests\**</DefaultItemExcludes>
   </PropertyGroup>
 
   <ItemGroup>
-    <Compile Remove="RofidaMohamed\hiiiii\**" />
-    <EmbeddedResource Remove="RofidaMohamed\hiiiii\**" />
-    <None Remove="RofidaMohamed\hiiiii\**" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="NorhanMostafa\NewFolder1\" />
-    <Folder Include="NorhanMostafa\NewFolder\" />
-  </ItemGroup>
-
-  <ItemGroup>
     <PackageReference Include="Bunifu.UI.WinForms" Version="6.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Design" Version="8.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
-    <PackageReference Include="Microsoft.EntityFrameworkCore.SqlServer" Version="8.0.1" />
-    <PackageReference Include="Microsoft.EntityFrameworkCore.Tools" Version="8.0.1">
-      <PrivateAssets>all</PrivateAssets>
-      <IncludeAssets>runtime; build; native; contentfiles; analyzers; buildtransitive</IncludeAssets>
-    </PackageReference>
   </ItemGroup>
 
   <ItemGroup>
-    <Compile Update="Properties\Resources.Designer.cs">
-      <DesignTime>True</DesignTime>
-      <AutoGen>True</AutoGen>
-      <DependentUpon>Resources.resx</DependentUpon>
-    </Compile>
-  </ItemGroup>
-
-  <ItemGroup>
-    <EmbeddedResource Update="Properties\Resources.resx">
-      <Generator>ResXFileCodeGenerator</Generator>
-      <LastGenOutput>Resources.Designer.cs</LastGenOutput>
-    </EmbeddedResource>
+    <ProjectReference Include="ClinicManagement.Core\ClinicManagement.Core.csproj" />
   </ItemGroup>
 
 </Project>
