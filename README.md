@@ -50,10 +50,10 @@ The table and class names keep the original spelling so existing databases keep 
 
 Requirements: Windows, the .NET 8 SDK, and SQL Server or LocalDB.
 
-```bash
+```powershell
 # 1. Optional: point the app at another server. The default is LocalDB:
 #    Server=(localdb)\MSSQLLocalDB;Database=DBClinicalManagement;Trusted_Connection=True;TrustServerCertificate=True
-set CLINIC_DB_CONNECTION=Server=.\SQLEXPRESS;Database=DBClinicalManagement;Trusted_Connection=True;TrustServerCertificate=True
+$env:CLINIC_DB_CONNECTION = "Server=.\SQLEXPRESS;Database=DBClinicalManagement;Trusted_Connection=True;TrustServerCertificate=True"
 
 # 2. Create or upgrade the schema with the migrations in ClinicManagement.Core
 dotnet tool install --global dotnet-ef
