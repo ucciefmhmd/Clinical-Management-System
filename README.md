@@ -2,8 +2,6 @@
 
 A desktop application for running a small **clinic**: patients, doctors, receptionists, appointment reservations, and the doctor's diagnosis and prescription for each visit. It's built with **C# Windows Forms (.NET 8)** and **Entity Framework Core (code first) on SQL Server**. It was a team training project.
 
-<!-- TODO(Youssef): confirm which parts you built yourself before adding a "My role" section. -->
-
 ![Screenshot](https://github.com/ucciefmhmd/Clinical-Management-System/assets/155498111/e1a4ef04-302f-46a4-8e93-772eb1c4624f)
 
 ## Features by role
