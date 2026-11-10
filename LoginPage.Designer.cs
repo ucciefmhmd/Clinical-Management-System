@@ -65,7 +65,6 @@
             txtUsername.BackColor = Color.FromArgb(213, 242, 238);
             txtUsername.ForeColor = SystemColors.ControlText;
             txtUsername.Location = new Point(94, 253);
-            txtUsername.Multiline = true;
             txtUsername.Name = "txtUsername";
             txtUsername.Size = new Size(187, 41);
             txtUsername.TabIndex = 13;
@@ -85,7 +84,7 @@
             txtPassword.BackColor = Color.FromArgb(213, 242, 238);
             txtPassword.ForeColor = SystemColors.ControlText;
             txtPassword.Location = new Point(94, 332);
-            txtPassword.Multiline = true;
+            txtPassword.UseSystemPasswordChar = true;
             txtPassword.Name = "txtPassword";
             txtPassword.Size = new Size(187, 41);
             txtPassword.TabIndex = 15;
@@ -229,7 +228,6 @@
             Name = "LoginPage";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Login ";
-            Load += LoginPage_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox1).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox3).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox2).EndInit();
