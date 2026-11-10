@@ -1,48 +1,39 @@
-﻿using C_sharp_Project.YoussifMohamed.Model.Database;
-using C_sharp_Project.YoussifMohamed.Model.Entity;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
-using static System.Windows.Forms.VisualStyles.VisualStyleElement;
+﻿using ClinicManagement.Core.Services;
 
 namespace C_sharp_Project.RofidaMohamed
 {
+    /// <summary>Add / edit dialog for one reservation. Returns DialogResult.OK when something was saved.</summary>
     public partial class ResrveData : Form
     {
         private bool isDragging = false;
         private Point lastCursorPosition;
-        private int receptionistId;
-        private ReciptionAddPatientDoc SelectedResrve;
+        private readonly int receptionistId;
+        /// <summary>Reservation being edited; 0 = adding a new one.</summary>
+        private readonly int reservationId;
 
-        ClinicDB db = new ClinicDB();
         public ResrveData(int respId)
         {
             InitializeComponent();
             receptionistId = respId;
-            //to moveable 
+            //to moveable
             this.MouseDown += MainForm_MouseDown;
             this.MouseMove += MainForm_MouseMove;
             this.MouseUp += MainForm_MouseUp;
 
             label1.Text = "Add New An Appointment";
             okbtn.Text = "Add";
-
-
         }
 
-        public ResrveData(int respId, ReciptionAddPatientDoc Reseve) : this(respId)
+        public ResrveData(int respId, int reservationId) : this(respId)
         {
-            SelectedResrve = Reseve;
+            this.reservationId = reservationId;
             label1.Text = "Edit this An Appointment";
             okbtn.Text = "Edit";
         }
-        private void MainForm_MouseDown(object sender, MouseEventArgs e)
+
+        private bool IsEdit => reservationId > 0;
+
+        private void MainForm_MouseDown(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -51,7 +42,7 @@ namespace C_sharp_Project.RofidaMohamed
             }
         }
 
-        private void MainForm_MouseMove(object sender, MouseEventArgs e)
+        private void MainForm_MouseMove(object? sender, MouseEventArgs e)
         {
             if (isDragging)
             {
@@ -63,7 +54,7 @@ namespace C_sharp_Project.RofidaMohamed
             }
         }
 
-        private void MainForm_MouseUp(object sender, MouseEventArgs e)
+        private void MainForm_MouseUp(object? sender, MouseEventArgs e)
         {
             if (e.Button == MouseButtons.Left)
             {
@@ -73,111 +64,84 @@ namespace C_sharp_Project.RofidaMohamed
 
         private void load()
         {
-            var patients = db.Patient.Select(p => new { name = p.Name, id = p.Id }).ToList();
+            var service = AppServices.Reservations;
 
-
-            PatientBox.DisplayMember = "name";
-            PatientBox.ValueMember = "id";
-            PatientBox.DataSource = patients;
+            PatientBox.DisplayMember = nameof(LookupItem.Name);
+            PatientBox.ValueMember = nameof(LookupItem.Id);
+            PatientBox.DataSource = service.GetPatientOptions();
             PatientBox.SelectedIndex = -1;
 
-            var doctors = db.Doctor.Select(d => new { name = d.Name, id = d.Id }).ToList();
-
-            drBox.DisplayMember = "name";
-            drBox.ValueMember = "id";
-            drBox.DataSource = doctors;
+            drBox.DisplayMember = nameof(LookupItem.Name);
+            drBox.ValueMember = nameof(LookupItem.Id);
+            drBox.DataSource = service.GetDoctorOptions();
             drBox.SelectedIndex = -1;
-
 
             StateBox.DisplayMember = "Text";
             StateBox.ValueMember = "Value";
-
-            var items = new[] {
+            StateBox.DataSource = new[]
+            {
                 new { Text = "Waiting", Value = false },
                 new { Text = "Done", Value = true },
-
             };
-            StateBox.DataSource = items;
 
-            if (SelectedResrve != null)
+            if (IsEdit)
             {
-                PatientBox.SelectedValue = SelectedResrve.PatientID;
-                drBox.SelectedValue = SelectedResrve.DoctorID;
-                dtp1.Value = SelectedResrve.Appointment;
-                priceTextBox.Text = SelectedResrve.Price.ToString();
-                StateBox.SelectedValue = SelectedResrve.State;
+                var reservation = service.Get(reservationId);
+                if (reservation == null)
+                {
+                    MessageBox.Show("This reservation no longer exists.");
+                    DialogResult = DialogResult.OK; // let the list refresh
+                    Close();
+                    return;
+                }
+                PatientBox.SelectedValue = reservation.PatientID;
+                drBox.SelectedValue = reservation.DoctorID;
+                if (reservation.Appointment < dtp1.MinDate)
+                    dtp1.MinDate = reservation.Appointment;
+                dtp1.Value = reservation.Appointment;
+                priceTextBox.Text = reservation.Price.ToString();
+                StateBox.SelectedValue = reservation.State;
             }
             else
             {
                 dtp1.MinDate = DateTime.Now;
                 StateBox.Enabled = false;
             }
-
-
-
-
-
         }
 
         private void okbtn_Click(object sender, EventArgs e)
         {
-            
+            var input = new ReservationInput(
+                Ui.SelectedId(PatientBox),
+                Ui.SelectedId(drBox),
+                dtp1.Value,
+                priceTextBox.Text,
+                Done: StateBox.SelectedValue is true);
 
-            int price;
-            bool check = int.TryParse(priceTextBox.Text, out price);
-            if (check)
+            bool saved = Ui.Run(() =>
             {
-                if (SelectedResrve != null)
-                {
-                    SelectedResrve.PatientID = Convert.ToInt32(PatientBox.SelectedValue);
-                    SelectedResrve.DoctorID = Convert.ToInt32(drBox.SelectedValue);
-                    SelectedResrve.ReciptionistID = receptionistId;
-
-                    SelectedResrve.Appointment = dtp1.Value;
-                    SelectedResrve.Price = int.Parse(priceTextBox.Text);
-                    SelectedResrve.State = Convert.ToBoolean(StateBox.SelectedValue);
-                    db.ReciptionAddPatientDoc.Update(SelectedResrve);
-                    
-
-                } else 
-                {
-                    ReciptionAddPatientDoc resrve = new ReciptionAddPatientDoc();
-                    resrve.PatientID = Convert.ToInt32(PatientBox.SelectedValue);
-                    resrve.DoctorID = Convert.ToInt32(drBox.SelectedValue);
-                    resrve.ReciptionistID = receptionistId;
-
-                    resrve.Appointment = dtp1.Value;
-                    resrve.Price = int.Parse(priceTextBox.Text);
-                    resrve.State = false;
-
-                    db.ReciptionAddPatientDoc.Add(resrve);
-                    
-                }
-                db.SaveChanges();
-                this.Close();
-
-            }
-            else
+                if (IsEdit)
+                    AppServices.Reservations.Update(reservationId, receptionistId, input);
+                else
+                    AppServices.Reservations.Add(receptionistId, input);
+            });
+            if (saved)
             {
-                MessageBox.Show("Plz Enter Right Price");
+                DialogResult = DialogResult.OK;
+                Close();
             }
-
-
-
-
-
         }
 
         private void CancelBtn_Click(object sender, EventArgs e)
         {
-            this.Close();
+            DialogResult = DialogResult.Cancel;
+            Close();
         }
 
         private void ResrveData_Load(object sender, EventArgs e)
         {
-            load();
+            if (!Ui.Run(load))
+                Close();
         }
     }
-
-
 }

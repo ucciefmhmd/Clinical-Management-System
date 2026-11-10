@@ -182,7 +182,6 @@
             label3.Size = new Size(146, 28);
             label3.TabIndex = 20;
             label3.Text = "Reservation";
-            label3.Click += label3_Click;
             // 
             // label1
             // 
@@ -226,7 +225,6 @@
             pictureBox12.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox12.TabIndex = 153;
             pictureBox12.TabStop = false;
-            pictureBox12.Click += pictureBox12_Click;
             // 
             // label2
             // 
@@ -326,7 +324,7 @@
             // textBox4
             // 
             textBox4.Location = new Point(540, 221);
-            textBox4.Multiline = true;
+            textBox4.UseSystemPasswordChar = true;
             textBox4.Name = "textBox4";
             textBox4.Size = new Size(191, 34);
             textBox4.TabIndex = 121;
@@ -351,7 +349,6 @@
             label11.Size = new Size(159, 28);
             label11.TabIndex = 123;
             label11.Text = "Receptionist ";
-            label11.Click += label11_Click;
             // 
             // searchbtn
             // 
@@ -497,7 +494,6 @@
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(892, 346);
             dataGridView1.TabIndex = 131;
-            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             dataGridView1.DoubleClick += dataGridView1_DoubleClick_1;
             // 
             // Receptionist
@@ -528,6 +524,7 @@
             Name = "Receptionist";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "Receptionist";
+            Load += Receptionist_Load;
             panel1.ResumeLayout(false);
             panel1.PerformLayout();
             ((System.ComponentModel.ISupportInitialize)pictureBox12).EndInit();

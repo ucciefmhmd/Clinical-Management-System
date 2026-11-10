@@ -126,7 +126,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(250, 696);
             panel1.TabIndex = 104;
-            panel1.Paint += panel1_Paint;
             // 
             // pictureBox12
             // 

@@ -115,7 +115,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(250, 700);
             panel1.TabIndex = 124;
-            panel1.Paint += panel1_Paint;
             // 
             // pictureBox12
             // 
@@ -165,7 +164,6 @@
             label3.Size = new Size(146, 28);
             label3.TabIndex = 20;
             label3.Text = "Reservation";
-            label3.Click += label3_Click;
             // 
             // label1
             // 
@@ -299,7 +297,6 @@
             numPatient.Size = new Size(111, 25);
             numPatient.TabIndex = 24;
             numPatient.Text = "numPatient";
-            numPatient.Click += numPatient_Click;
             // 
             // label7
             // 

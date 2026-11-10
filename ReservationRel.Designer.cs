@@ -371,7 +371,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(250, 696);
             panel1.TabIndex = 104;
-            panel1.Paint += panel1_Paint;
             // 
             // pictureBox12
             // 
@@ -523,7 +522,6 @@
             Name = "ReservationRel";
             StartPosition = FormStartPosition.CenterScreen;
             Text = "ReservationPage";
-            Activated += ReservationRel_Activated;
             Load += ReservationRel_Load;
             ((System.ComponentModel.ISupportInitialize)pictureBox7).EndInit();
             ((System.ComponentModel.ISupportInitialize)pictureBox6).EndInit();

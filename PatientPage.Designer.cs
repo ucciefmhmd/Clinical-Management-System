@@ -168,7 +168,6 @@
             panel1.Name = "panel1";
             panel1.Size = new Size(250, 700);
             panel1.TabIndex = 0;
-            panel1.Paint += panel1_Paint;
             // 
             // pictureBox12
             // 
@@ -351,7 +350,6 @@
             label10.Size = new Size(79, 20);
             label10.TabIndex = 103;
             label10.Text = "Address";
-            label10.Click += label10_Click;
             // 
             // searchbtn
             // 
@@ -497,7 +495,6 @@
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(892, 354);
             dataGridView1.TabIndex = 131;
-            dataGridView1.CellContentClick += dataGridView1_CellContentClick_1;
             dataGridView1.DoubleClick += dataGridView1_DoubleClick;
             // 
             // PatientPage

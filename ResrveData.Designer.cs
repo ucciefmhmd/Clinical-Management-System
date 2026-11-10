@@ -68,7 +68,8 @@
             // dtp1
             // 
             resources.ApplyResources(dtp1, "dtp1");
-            dtp1.Format = DateTimePickerFormat.Time;
+            dtp1.CustomFormat = "dd/MM/yyyy  hh:mm tt";
+            dtp1.Format = DateTimePickerFormat.Custom;
             dtp1.MinDate = new DateTime(2022, 1, 25, 0, 0, 0, 0);
             dtp1.Name = "dtp1";
             // 

@@ -1,207 +1,128 @@
 ﻿using C_sharp_Project.EmanMetwallyElgharabawy;
-using C_sharp_Project.RofidaMohamed;
-using C_sharp_Project.YoussifMohamed.Model.Database;
-using C_sharp_Project.YoussifMohamed.Model.Entity;
-using Microsoft.EntityFrameworkCore;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Data;
-using System.Drawing;
-using System.Linq;
-using System.Net;
-using System.Text;
-using System.Threading.Tasks;
-using System.Windows.Forms;
+using ClinicManagement.Core.Services;
 
 namespace C_sharp_Project
 {
-
+    /// <summary>Admin page for doctors. Passwords are never shown; leave the box empty on Update to keep the current one.</summary>
     public partial class DoctorPage : Form
     {
-        ClinicDB db = new ClinicDB();
-        Doctor Doctor1 = new Doctor();
+        /// <summary>Id of the doctor loaded by double-clicking the grid; 0 = none.</summary>
+        private int selectedId;
+
         public DoctorPage()
         {
             InitializeComponent();
-            display();
         }
 
         private void DoctorPage_Load(object sender, EventArgs e)
         {
-
+            display();
         }
+
         private void Clear()
         {
+            selectedId = 0;
             Doctorname.Text = "";
             DoctorAddress.Text = "";
             Doctorphone.Text = "";
             Doctorspecialation.Text = "";
             DoctorExperiance.Text = "";
             Doctorpassword.Text = "";
+            Doctorpassword.PlaceholderText = "";
             DoctorGender.Text = "";
             DoctorBirthofdate.Value = DateTime.Now;
         }
 
-        public void display()
+        /// <summary>Always binds the same row type (with Id, without password), so double-click keeps working after Add or Search.</summary>
+        public void display(string? exactName = null)
         {
-            var Doctor = db.Doctor.Select(a => new { id = a.Id, Name = a.Name, Address = a.Address, Specialization = a.Specialization, Phone = a.Phone, Experience = a.Experience, Gender = a.Gender, DOB = a.DOB, password = a.password }).ToList();
-            dataGridView1.DataSource = Doctor;
+            Ui.Run(() => dataGridView1.DataSource = AppServices.Doctors.Search(exactName));
         }
+
+        private DoctorInput ReadForm() => new(
+            Doctorname.Text, DoctorGender.Text, Doctorspecialation.Text, DoctorExperiance.Text,
+            DoctorAddress.Text, Doctorphone.Text, DoctorBirthofdate.Value, Doctorpassword.Text);
 
         private void bunifuThinButton22_Click(object sender, EventArgs e)
         {
-            using (ClinicDB Con = new ClinicDB())
+            if (Ui.Run(() => AppServices.Doctors.Add(ReadForm())))
             {
-                var DOC = new YoussifMohamed.Model.Entity.Doctor
-                {
-                    //Id = int.Parse((docid.Text).ToString()),
-                    Name = Doctorname.Text,
-                    Address = DoctorAddress.Text,
-                    Phone = Doctorphone.Text,
-                    Specialization = Doctorspecialation.Text,
-                    Experience = DoctorExperiance.Text,
-                    password = Doctorpassword.Text,
-                    Gender = DoctorGender.Text,
-                    DOB = DoctorBirthofdate.Value
-
-                };
-                Con.Doctor.Add(DOC);
-                Con.SaveChanges();
-
-                var Doctor = Con.Doctor.Select(a => new { Name = a.Name, Address = a.Address, Specialization = a.Specialization, Phone = a.Phone, Experience = a.Experience, Gender = a.Gender, DOB = a.DOB }).ToList();
-                dataGridView1.DataSource = Doctor;
-                Con.SaveChanges();
+                display();
                 Clear();
                 MessageBox.Show("Doctor Added successfully!");
-            };
+            }
         }
 
         private void searchbtn_Click(object sender, EventArgs e)
         {
-            var searchByName = Doctorname.Text.Trim();
-            var search = db.Doctor.Where(s => s.Name == searchByName).Select(a => new { ID = a.Id, Name = a.Name, Gender = a.Gender, Address = a.Address, Phone = a.Phone, Password = a.password }).ToList();
-            dataGridView1.DataSource = search;
+            display(Doctorname.Text);
         }
 
         private void deletebtn_Click(object sender, EventArgs e)
         {
-            var Del = db.Entry(Doctor1);
-            if (Del.State == EntityState.Detached)
-                db.Doctor.Attach(Doctor1);
-            db.Doctor.Remove(Doctor1);
-            db.SaveChanges();
-            display();
-            Clear();
-        }
-
-        private void dataGridView1_DoubleClick(object sender, EventArgs e)
-        {
-
-           
+            if (selectedId <= 0)
+            {
+                MessageBox.Show("Please double-click a doctor in the list first.");
+                return;
+            }
+            if (!Ui.Confirm($"Delete doctor '{Doctorname.Text}'?{Environment.NewLine}" +
+                            "Their reservations and visit records will be deleted too."))
+                return;
+            if (Ui.Run(() => AppServices.Doctors.Delete(selectedId)))
+            {
+                display();
+                Clear();
+            }
         }
 
         private void updatebtn_Click(object sender, EventArgs e)
         {
-            Doctor1.Name = Doctorname.Text;
-            Doctor1.Address = DoctorAddress.Text;
-            Doctor1.Phone = Doctorphone.Text;
-            Doctor1.Specialization = Doctorspecialation.Text;
-            Doctor1.Experience = DoctorExperiance.Text;
-            Doctor1.password = Doctorpassword.Text;
-            Doctor1.Gender = DoctorGender.Text;
-            Doctor1.DOB = DoctorBirthofdate.Value;
-            db.Entry(Doctor1).State = EntityState.Modified;
-            db.SaveChanges();
-            display();
-            Clear();
-        }
-        private void pictureBox1_Click(object sender, EventArgs e)
-        {
-            Home_Page home_Page = new Home_Page();
-            home_Page.Show();
-            this.Hide();
-        }
-
-        private void label2_Click(object sender, EventArgs e)
-        {
-            PatientPage ppage = new PatientPage();
-            ppage.Show();
-            this.Hide();
-        }
-
-        private void pictureBox2_Click(object sender, EventArgs e)
-        {
-            PatientPage ppage = new PatientPage();
-            ppage.Show();
-            this.Hide();
-        }
-
-        private void label1_Click(object sender, EventArgs e)
-        {
-            Receptionist receptionist = new Receptionist();
-            receptionist.Show();
-            this.Hide();
-        }
-
-        private void pictureBox3_Click(object sender, EventArgs e)
-        {
-            Receptionist receptionist = new Receptionist();
-            receptionist.Show();
-            this.Hide();
-        }
-
-        private void label6_Click(object sender, EventArgs e)
-        {
-            LoginPage loginPage = new LoginPage();
-            loginPage.Show();
-            this.Hide();
-        }
-
-        private void pictureBox6_Click(object sender, EventArgs e)
-        {
-            LoginPage loginPage = new LoginPage();
-            loginPage.Show();
-            this.Hide();
-        }
-
-        private void pictureBox7_Click(object sender, EventArgs e)
-        {
-            Application.Exit();
-        }
-
-        private void label4_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void label3_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void pictureBox12_Click(object sender, EventArgs e)
-        {
-
-        }
-
-        private void dataGridView1_CellContentClick(object sender, DataGridViewCellEventArgs e)
-        {
-
+            if (Ui.Run(() => AppServices.Doctors.Update(selectedId, ReadForm())))
+            {
+                display();
+                Clear();
+            }
         }
 
         private void dataGridView1_DoubleClick_1(object sender, EventArgs e)
         {
-            if (dataGridView1.CurrentRow.Index != -1)
+            if (Ui.CurrentRowId(dataGridView1) is not int id)
+                return;
+            Ui.Run(() =>
             {
-                Doctor1.Id = Convert.ToInt32(dataGridView1.CurrentRow.Cells["Id"].Value);
-                Doctor1 = db.Doctor.Where(a => a.Id == Doctor1.Id).FirstOrDefault();
-                Doctorname.Text = Doctor1.Name;
-                DoctorGender.Text = Doctor1.Gender;
-                DoctorAddress.Text = Doctor1.Address;
-                Doctorphone.Text = Doctor1.Phone;
-                Doctorpassword.Text = Doctor1.password;
-            }
+                var doctor = AppServices.Doctors.Get(id);
+                if (doctor == null)
+                {
+                    MessageBox.Show("This doctor no longer exists.");
+                    display();
+                    return;
+                }
+                selectedId = doctor.Id;
+                Doctorname.Text = doctor.Name;
+                DoctorGender.Text = doctor.Gender;
+                DoctorAddress.Text = doctor.Address;
+                Doctorphone.Text = doctor.Phone;
+                Doctorspecialation.Text = doctor.Specialization;
+                DoctorExperiance.Text = doctor.Experience;
+                DoctorBirthofdate.Value = doctor.DOB;
+                Doctorpassword.Text = "";
+                Doctorpassword.PlaceholderText = "unchanged if empty";
+            });
+        }
+
+        // ---- navigation ----
+
+        private void pictureBox1_Click(object sender, EventArgs e) => Ui.Navigate(this, new Home_Page());
+        private void label2_Click(object sender, EventArgs e) => Ui.Navigate(this, new PatientPage());
+        private void pictureBox2_Click(object sender, EventArgs e) => Ui.Navigate(this, new PatientPage());
+        private void label1_Click(object sender, EventArgs e) => Ui.Navigate(this, new Receptionist());
+        private void pictureBox3_Click(object sender, EventArgs e) => Ui.Navigate(this, new Receptionist());
+        private void label6_Click(object sender, EventArgs e) => Ui.Navigate(this, new LoginPage());
+        private void pictureBox6_Click(object sender, EventArgs e) => Ui.Navigate(this, new LoginPage());
+
+        private void pictureBox7_Click(object sender, EventArgs e)
+        {
+            Application.Exit();
         }
     }
 }

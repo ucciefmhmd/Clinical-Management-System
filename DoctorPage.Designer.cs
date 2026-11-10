@@ -294,7 +294,6 @@
             label4.Size = new Size(99, 28);
             label4.TabIndex = 21;
             label4.Text = "Doctors";
-            label4.Click += label4_Click;
             // 
             // label3
             // 
@@ -306,7 +305,6 @@
             label3.Size = new Size(146, 28);
             label3.TabIndex = 20;
             label3.Text = "Reservation";
-            label3.Click += label3_Click;
             // 
             // label1
             // 
@@ -350,7 +348,6 @@
             pictureBox12.SizeMode = PictureBoxSizeMode.Zoom;
             pictureBox12.TabIndex = 153;
             pictureBox12.TabStop = false;
-            pictureBox12.Click += pictureBox12_Click;
             // 
             // label2
             // 
@@ -449,7 +446,7 @@
             // Doctorpassword
             // 
             Doctorpassword.Location = new Point(656, 185);
-            Doctorpassword.Multiline = true;
+            Doctorpassword.UseSystemPasswordChar = true;
             Doctorpassword.Name = "Doctorpassword";
             Doctorpassword.Size = new Size(143, 34);
             Doctorpassword.TabIndex = 121;
@@ -542,7 +539,6 @@
             dataGridView1.SelectionMode = DataGridViewSelectionMode.FullRowSelect;
             dataGridView1.Size = new Size(865, 346);
             dataGridView1.TabIndex = 127;
-            dataGridView1.CellContentClick += dataGridView1_CellContentClick;
             dataGridView1.DoubleClick += dataGridView1_DoubleClick_1;
             // 
             // DoctorPage
