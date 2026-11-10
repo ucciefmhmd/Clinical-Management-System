@@ -24,6 +24,12 @@ namespace C_sharp_Project.YoussifMohamed.Model.Database
         public DbSet<Reciptionist> Reciptionist { get; set; } = null!;
         public DbSet<Doctorspatient> Doctorspatient { get; set; } = null!;
         public DbSet<ReciptionAddPatientDoc> ReciptionAddPatientDoc { get; set; } = null!;
+        public DbSet<Admin> Admin { get; set; } = null!;
+
+        protected override void OnModelCreating(ModelBuilder modelBuilder)
+        {
+            modelBuilder.Entity<Admin>().HasIndex(a => a.Username).IsUnique();
+        }
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {

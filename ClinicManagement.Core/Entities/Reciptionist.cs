@@ -10,7 +10,8 @@ namespace C_sharp_Project.YoussifMohamed.Model.Entity
         public string Gender { get; set; } = string.Empty;
         public string Address { get; set; } = string.Empty;
         public string Phone { get; set; } = string.Empty;
-        [MinLength(5) , MaxLength(15)]
+        // PBKDF2 hash (see PasswordHasher); legacy rows may still hold plain text until the next login.
+        [MaxLength(256)]
         [Required]
         public string Password { get; set; } = string.Empty;
     }
