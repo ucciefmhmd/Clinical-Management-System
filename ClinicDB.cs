@@ -19,7 +19,10 @@ namespace C_sharp_Project.YoussifMohamed.Model.Database
 
         protected override void OnConfiguring(DbContextOptionsBuilder optionsBuilder)
         {
-            optionsBuilder.UseSqlServer("Server=localhost\\SQLEXPRESS;Database=DBClinicalManagement;Encrypt=false;Trusted_Connection=True;TrustServerCertificate=True");
+            // Override with the CLINIC_DB_CONNECTION environment variable; defaults to SQL Server LocalDB.
+            var connectionString = Environment.GetEnvironmentVariable("CLINIC_DB_CONNECTION")
+                ?? "Server=(localdb)\\MSSQLLocalDB;Database=DBClinicalManagement;Trusted_Connection=True;TrustServerCertificate=True";
+            optionsBuilder.UseSqlServer(connectionString);
         }
  
     }
