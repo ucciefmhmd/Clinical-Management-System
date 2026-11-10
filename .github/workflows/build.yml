@@ -16,4 +16,6 @@ jobs:
       - uses: actions/setup-dotnet@v4
         with:
           dotnet-version: 8.0.x
-      - run: dotnet build "C sharp Project.csproj" -c Release
+      - run: dotnet build ClinicManagement.sln -c Release
+      # Unit tests use EF Core SQLite in-memory; no SQL Server needed.
+      - run: dotnet test ClinicManagement.sln -c Release --no-build --logger "console;verbosity=normal"
