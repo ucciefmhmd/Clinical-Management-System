@@ -1,13 +1,52 @@
-The Clinical Trial Management System (CTMS) is a software solution designed to facilitate the management of clinical trials within the healthcare industry. It serves as a comprehensive platform for researchers, administrators, and other
-stakeholders involved in the trial process.
+# Clinic Management System (C# Windows Forms)
 
-Utilizing Windows Forms and C# as the primary tools, the CTMS offers a user-friendly interface for desktop applications, making it accessible to users within healthcare settings. The use of Windows Forms allows for efficient data input and visualization, enhancing the overall user experience.
+A desktop application for running a small **clinic**: patients, doctors, receptionists, appointment reservations, and the doctor's diagnosis and prescription for each visit. It's built with **C# Windows Forms (.NET 8)** and **Entity Framework Core (code first) on SQL Server**. It was a team training project.
 
-In terms of database management, the CTMS employs a Code First approach with Entity Framework. This approach allows developers to define the domain model using C# classes, with the database schema generated automatically based on these classes. By adopting the Code First approach, the CTMS ensures flexibility and ease of maintenance, enabling developers to make changes to the database schema as needed without impacting the application's functionality.
+<!-- TODO(Youssef): confirm which parts you built yourself before adding a "My role" section. -->
 
-Key features of the CTMS include patient enrollment and management, study protocol tracking, scheduling of visits and procedures, data collection and analysis, regulatory compliance monitoring, and reporting functionalities. These features are designed to streamline trial operations, improve efficiency, and ensure compliance with regulatory requirements.
+![Screenshot](https://github.com/ucciefmhmd/Clinical-Management-System/assets/155498111/e1a4ef04-302f-46a4-8e93-772eb1c4624f)
 
+## Features by role
 
-ScreenShot
-https://i.imgur.com/y6UMQ0L.jpg
- ![test](https://github.com/ucciefmhmd/Clinical-Management-System/assets/155498111/e1a4ef04-302f-46a4-8e93-772eb1c4624f)
+The login screen asks for a role:
+
+| Role | Can do |
+|---|---|
+| **Admin** | Manage patients and doctors, and open the home dashboard (counts of patients, doctors, receptionists and reservations) |
+| **Doctor** | A personal dashboard of today's reservations (waiting / done), and recording a **diagnosis and medicine** for a patient |
+| **Receptionist** | Register patients and book **reservations** with a doctor, including appointment time, price and status |
+
+## Data model
+
+| Entity | Main fields |
+|---|---|
+| `Patient` | Name, gender, date of birth, address, phone |
+| `Doctor` | Name, specialisation, experience, contact details |
+| `Reciptionist` | Name, contact details |
+| `ReciptionAddPatientDoc` (reservation) | Patient, doctor, receptionist, appointment, price, state |
+| `Doctorspatient` (visit record) | Patient, doctor, diagnosis, medicine |
+
+## Running it
+
+Requirements: Windows, the .NET 8 SDK, and SQL Server or LocalDB.
+
+```bash
+# The default connection string uses LocalDB; override it if needed:
+set CLINIC_DB_CONNECTION=Server=.\SQLEXPRESS;Database=DBClinicalManagement;Trusted_Connection=True;TrustServerCertificate=True
+
+# The repository has no EF migrations, so create the schema once:
+dotnet tool install --global dotnet-ef
+dotnet ef migrations add Initial
+dotnet ef database update
+
+dotnet run
+```
+
+## Known limitations (training project)
+
+* The admin login uses **fixed demo credentials in `LoginPage.cs`**. Doctor and receptionist passwords are stored in **plain text**. A real system would use hashed passwords (for example ASP.NET Core Identity's password hasher) and no built-in accounts.
+* The UI uses the third-party **Bunifu UI WinForms** controls.
+
+## Tech
+
+C# · Windows Forms · .NET 8 · Entity Framework Core 8 · SQL Server · Bunifu UI
