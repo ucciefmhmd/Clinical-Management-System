@@ -1,0 +1,22 @@
+# Build output
+[Bb]in/
+[Oo]bj/
+[Ll]og/
+*.user
+*.suo
+
+# Visual Studio / Rider
+.vs/
+.idea/
+
+# Test results
+TestResults/
+*.trx
+coverage*.xml
+
+# Local databases created while developing or testing
+*.mdf
+*.ldf
+*.db
+*.db-shm
+*.db-wal
